@@ -1,0 +1,422 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e10]:
+        - heading "AI Resume Builder" [level=1] [ref=e11]
+        - paragraph [ref=e12]: Craft, polish & export — powered by Claude
+    - generic [ref=e13]:
+      - button "ATS Optimizer" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+        - text: ATS Optimizer
+      - button "Download PDF" [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - text: Download PDF
+  - main [ref=e23]:
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - button "Personal Info" [ref=e28] [cursor=pointer]:
+          - img [ref=e30]
+          - generic [ref=e33]: Personal Info
+          - img [ref=e34]
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - generic [ref=e39]: Full name
+            - textbox "Full name" [ref=e40]:
+              - /placeholder: Jane Doe
+              - text: Alex Morgan
+          - generic [ref=e41]:
+            - generic [ref=e42]: Location
+            - textbox "Location" [ref=e43]:
+              - /placeholder: City, Country
+              - text: San Francisco, CA
+          - generic [ref=e44]:
+            - generic [ref=e45]: Email
+            - textbox "Email" [ref=e46]:
+              - /placeholder: jane@email.com
+              - text: alex.morgan@email.com
+          - generic [ref=e47]:
+            - generic [ref=e48]: Phone
+            - textbox "Phone" [ref=e49]:
+              - /placeholder: (555) 000-0000
+              - text: (555) 123-4567
+          - generic [ref=e50]:
+            - generic [ref=e51]: LinkedIn
+            - textbox "LinkedIn" [ref=e52]:
+              - /placeholder: linkedin.com/in/…
+              - text: linkedin.com/in/alexmorgan
+          - generic [ref=e53]:
+            - generic [ref=e54]: GitHub
+            - textbox "GitHub" [ref=e55]:
+              - /placeholder: github.com/…
+              - text: github.com/alexmorgan
+      - generic [ref=e56]:
+        - generic [ref=e58]:
+          - generic [ref=e59]:
+            - button "Drag to reorder" [ref=e60]:
+              - img [ref=e61]
+            - button "Summary" [ref=e68] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e73]: Summary
+              - img [ref=e74]
+            - button "Improve" [ref=e76] [cursor=pointer]:
+              - img [ref=e77]
+              - text: Improve
+          - generic [ref=e80]:
+            - generic [ref=e81]: Professional summary / objective
+            - textbox "Professional summary / objective" [ref=e82]:
+              - /placeholder: A concise, impactful summary of your experience and goals…
+              - text: Full-stack engineer with 5+ years building performant web applications. Passionate about clean architecture, developer experience, and shipping products that users love.
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - button "Drag to reorder" [ref=e86]:
+              - img [ref=e87]
+            - button "Work Experience" [ref=e94] [cursor=pointer]:
+              - img [ref=e96]
+              - generic [ref=e99]: Work Experience
+              - img [ref=e100]
+          - generic [ref=e103]:
+            - generic [ref=e104]:
+              - generic [ref=e105]:
+                - generic [ref=e106]: Senior Software Engineer
+                - button "Remove entry" [ref=e107] [cursor=pointer]:
+                  - img [ref=e108]
+              - generic [ref=e111]:
+                - generic [ref=e112]:
+                  - generic [ref=e113]:
+                    - generic [ref=e114]: Job title
+                    - textbox "Job title" [ref=e115]:
+                      - /placeholder: Software Engineer
+                      - text: Senior Software Engineer
+                  - generic [ref=e116]:
+                    - generic [ref=e117]: Company
+                    - textbox "Company" [ref=e118]:
+                      - /placeholder: Acme Inc.
+                      - text: Northwind Labs
+                  - generic [ref=e119]:
+                    - generic [ref=e120]: Location
+                    - textbox "Location" [ref=e121]:
+                      - /placeholder: Remote / City
+                      - text: San Francisco, CA
+                  - generic [ref=e123]:
+                    - generic [ref=e124]: Start
+                    - generic [ref=e125]:
+                      - combobox [ref=e126]:
+                        - option "Month"
+                        - option "Jan" [selected]
+                        - option "Feb"
+                        - option "Mar"
+                        - option "Apr"
+                        - option "May"
+                        - option "Jun"
+                        - option "Jul"
+                        - option "Aug"
+                        - option "Sep"
+                        - option "Oct"
+                        - option "Nov"
+                        - option "Dec"
+                      - textbox "Year" [ref=e127]: "2022"
+                  - generic [ref=e128]:
+                    - generic [ref=e129]: End
+                    - generic [ref=e130]:
+                      - combobox [disabled] [ref=e131]:
+                        - option "Month" [selected]
+                        - option "Jan"
+                        - option "Feb"
+                        - option "Mar"
+                        - option "Apr"
+                        - option "May"
+                        - option "Jun"
+                        - option "Jul"
+                        - option "Aug"
+                        - option "Sep"
+                        - option "Oct"
+                        - option "Nov"
+                        - option "Dec"
+                      - textbox "Year" [disabled] [ref=e132]
+                - generic [ref=e133]:
+                  - checkbox "I currently work here" [checked] [ref=e134]
+                  - text: I currently work here
+                - generic [ref=e135]:
+                  - generic [ref=e136]: Bullet points
+                  - generic [ref=e137]:
+                    - textbox "Describe an accomplishment…" [ref=e138]: Led migration of monolith to microservices, cutting deploy time by 60%.
+                    - generic [ref=e139]:
+                      - button "Improve with AI" [ref=e140] [cursor=pointer]:
+                        - img [ref=e141]
+                      - button "Remove bullet" [ref=e143] [cursor=pointer]:
+                        - img [ref=e144]
+                  - generic [ref=e147]:
+                    - textbox "Describe an accomplishment…" [ref=e148]: Built a real-time analytics dashboard serving 40K+ daily active users.
+                    - generic [ref=e149]:
+                      - button "Improve with AI" [ref=e150] [cursor=pointer]:
+                        - img [ref=e151]
+                      - button "Remove bullet" [ref=e153] [cursor=pointer]:
+                        - img [ref=e154]
+                  - button "Add bullet" [ref=e157] [cursor=pointer]:
+                    - img [ref=e158]
+                    - text: Add bullet
+                - button "Generate bullets" [ref=e159] [cursor=pointer]:
+                  - img [ref=e160]
+                  - text: Generate bullets
+            - button "Add experience" [ref=e162] [cursor=pointer]:
+              - img [ref=e163]
+              - text: Add experience
+        - generic [ref=e165]:
+          - generic [ref=e166]:
+            - button "Drag to reorder" [ref=e167]:
+              - img [ref=e168]
+            - button "Education" [ref=e175] [cursor=pointer]:
+              - img [ref=e177]
+              - generic [ref=e180]: Education
+              - img [ref=e181]
+          - generic [ref=e184]:
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - generic [ref=e187]: B.S. Computer Science
+                - button "Remove entry" [ref=e188] [cursor=pointer]:
+                  - img [ref=e189]
+              - generic [ref=e193]:
+                - generic [ref=e194]:
+                  - generic [ref=e195]: Degree
+                  - textbox "Degree" [ref=e196]:
+                    - /placeholder: B.S. Computer Science
+                    - text: B.S. Computer Science
+                - generic [ref=e197]:
+                  - generic [ref=e198]: Institution
+                  - textbox "Institution" [ref=e199]:
+                    - /placeholder: University name
+                    - text: University of California, Berkeley
+                - generic [ref=e200]:
+                  - generic [ref=e201]: Year
+                  - textbox "Year" [ref=e202]:
+                    - /placeholder: "2020"
+                    - text: "2018"
+                - generic [ref=e203]:
+                  - generic [ref=e204]: GPA (optional)
+                  - textbox "GPA (optional)" [ref=e205]:
+                    - /placeholder: "3.8"
+                    - text: "3.8"
+            - button "Add education" [ref=e206] [cursor=pointer]:
+              - img [ref=e207]
+              - text: Add education
+        - generic [ref=e209]:
+          - generic [ref=e210]:
+            - button "Drag to reorder" [ref=e211]:
+              - img [ref=e212]
+            - button "Skills" [ref=e219] [cursor=pointer]:
+              - img [ref=e221]
+              - generic [ref=e223]: Skills
+              - img [ref=e224]
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - generic [ref=e229]:
+                - text: TypeScript
+                - button "Remove TypeScript" [ref=e230] [cursor=pointer]:
+                  - img [ref=e231]
+              - generic [ref=e234]:
+                - text: React
+                - button "Remove React" [ref=e235] [cursor=pointer]:
+                  - img [ref=e236]
+              - generic [ref=e239]:
+                - text: Node.js
+                - button "Remove Node.js" [ref=e240] [cursor=pointer]:
+                  - img [ref=e241]
+              - generic [ref=e244]:
+                - text: PostgreSQL
+                - button "Remove PostgreSQL" [ref=e245] [cursor=pointer]:
+                  - img [ref=e246]
+              - generic [ref=e249]:
+                - text: AWS
+                - button "Remove AWS" [ref=e250] [cursor=pointer]:
+                  - img [ref=e251]
+              - generic [ref=e254]:
+                - text: Docker
+                - button "Remove Docker" [ref=e255] [cursor=pointer]:
+                  - img [ref=e256]
+            - textbox "Type a skill and press Enter…" [ref=e259]
+        - generic [ref=e261]:
+          - generic [ref=e262]:
+            - button "Drag to reorder" [ref=e263]:
+              - img [ref=e264]
+            - button "Projects" [ref=e271] [cursor=pointer]:
+              - img [ref=e273]
+              - generic [ref=e278]: Projects
+              - img [ref=e279]
+          - generic [ref=e282]:
+            - generic [ref=e283]:
+              - generic [ref=e284]:
+                - generic [ref=e285]: OpenSchedule
+                - button "Remove entry" [ref=e286] [cursor=pointer]:
+                  - img [ref=e287]
+              - generic [ref=e290]:
+                - generic [ref=e291]:
+                  - generic [ref=e292]:
+                    - generic [ref=e293]: Project name
+                    - textbox "Project name" [ref=e294]:
+                      - /placeholder: OpenSchedule
+                      - text: OpenSchedule
+                  - generic [ref=e295]:
+                    - generic [ref=e296]: Tech stack
+                    - textbox "Tech stack" [ref=e297]:
+                      - /placeholder: React, Node, Postgres
+                      - text: React, Express, PostgreSQL
+                  - generic [ref=e298]:
+                    - generic [ref=e299]: URL (optional)
+                    - textbox "URL (optional)" [ref=e300]:
+                      - /placeholder: github.com/…
+                      - text: github.com/alexmorgan/openschedule
+                - generic [ref=e301]:
+                  - generic [ref=e302]: Bullet points
+                  - generic [ref=e303]:
+                    - textbox "Describe an accomplishment…" [ref=e304]: Open-source team scheduling tool with 1.2K GitHub stars.
+                    - generic [ref=e305]:
+                      - button "Improve with AI" [ref=e306] [cursor=pointer]:
+                        - img [ref=e307]
+                      - button "Remove bullet" [ref=e309] [cursor=pointer]:
+                        - img [ref=e310]
+                  - button "Add bullet" [ref=e313] [cursor=pointer]:
+                    - img [ref=e314]
+                    - text: Add bullet
+                - button "Generate bullets" [ref=e315] [cursor=pointer]:
+                  - img [ref=e316]
+                  - text: Generate bullets
+            - button "Add project" [ref=e318] [cursor=pointer]:
+              - img [ref=e319]
+              - text: Add project
+        - generic [ref=e321]:
+          - generic [ref=e322]:
+            - button "Drag to reorder" [ref=e323]:
+              - img [ref=e324]
+            - button "Certifications" [ref=e331] [cursor=pointer]:
+              - img [ref=e333]
+              - generic [ref=e336]: Certifications
+              - img [ref=e337]
+          - generic [ref=e340]:
+            - generic [ref=e341]:
+              - generic [ref=e342]:
+                - generic [ref=e343]: AWS Solutions Architect – Associate
+                - button "Remove entry" [ref=e344] [cursor=pointer]:
+                  - img [ref=e345]
+              - generic [ref=e349]:
+                - generic [ref=e350]:
+                  - generic [ref=e351]: Name
+                  - textbox "Name" [ref=e352]:
+                    - /placeholder: AWS Solutions Architect
+                    - text: AWS Solutions Architect – Associate
+                - generic [ref=e353]:
+                  - generic [ref=e354]: Issuer
+                  - textbox "Issuer" [ref=e355]:
+                    - /placeholder: Amazon Web Services
+                    - text: Amazon Web Services
+                - generic [ref=e356]:
+                  - generic [ref=e357]: Year
+                  - textbox "Year" [ref=e358]:
+                    - /placeholder: "2023"
+                    - text: "2023"
+            - button "Add certification" [ref=e359] [cursor=pointer]:
+              - img [ref=e360]
+              - text: Add certification
+        - generic [ref=e362]:
+          - generic [ref=e363]:
+            - button "Drag to reorder" [ref=e364]:
+              - img [ref=e365]
+            - button "Custom Sections" [ref=e372] [cursor=pointer]:
+              - img [ref=e374]
+              - generic [ref=e377]: Custom Sections
+              - img [ref=e378]
+          - button "Add custom section" [ref=e382] [cursor=pointer]:
+            - img [ref=e383]
+            - text: Add custom section
+      - status [ref=e384]
+    - generic [ref=e385]:
+      - generic [ref=e386]:
+        - generic [ref=e387]:
+          - button "Classic" [ref=e388] [cursor=pointer]
+          - button "Modern" [ref=e389] [cursor=pointer]
+          - button "Minimal" [ref=e390] [cursor=pointer]
+        - generic [ref=e391]:
+          - generic [ref=e392]: Font
+          - combobox [ref=e393]:
+            - option "Inter" [selected]
+            - option "Georgia"
+            - option "Merriweather"
+            - option "Roboto Mono"
+        - generic [ref=e394]:
+          - generic [ref=e395]: Accent
+          - generic [ref=e396]:
+            - 'button "Accent #6c63ff" [ref=e397] [cursor=pointer]'
+            - 'button "Accent #2563eb" [ref=e398] [cursor=pointer]'
+            - 'button "Accent #0ea5e9" [ref=e399] [cursor=pointer]'
+            - 'button "Accent #10b981" [ref=e400] [cursor=pointer]'
+            - 'button "Accent #f59e0b" [ref=e401] [cursor=pointer]'
+            - 'button "Accent #ef4444" [ref=e402] [cursor=pointer]'
+            - 'button "Accent #ec4899" [ref=e403] [cursor=pointer]'
+            - 'button "Accent #475569" [ref=e404] [cursor=pointer]'
+            - textbox "Custom accent color" [ref=e405] [cursor=pointer]: "#6c63ff"
+        - generic [ref=e406]:
+          - generic [ref=e407]: Size
+          - generic [ref=e408]:
+            - button "S" [ref=e409] [cursor=pointer]
+            - button "M" [ref=e410] [cursor=pointer]
+            - button "L" [ref=e411] [cursor=pointer]
+        - generic [ref=e412]:
+          - generic [ref=e413]: Margin
+          - generic [ref=e414]:
+            - button "Compact" [ref=e415] [cursor=pointer]
+            - button "Normal" [ref=e416] [cursor=pointer]
+            - button "Spacious" [ref=e417] [cursor=pointer]
+      - generic [ref=e424]:
+        - generic [ref=e425]:
+          - heading "Alex Morgan" [level=1] [ref=e426]
+          - generic [ref=e427]:
+            - generic [ref=e428]: alex.morgan@email.com
+            - generic [ref=e429]: ·(555) 123-4567
+            - generic [ref=e430]: ·San Francisco, CA
+            - generic [ref=e431]: ·linkedin.com/in/alexmorgan
+            - generic [ref=e432]: ·github.com/alexmorgan
+        - generic [ref=e433]:
+          - generic [ref=e434]:
+            - heading "Summary" [level=2] [ref=e435]
+            - paragraph [ref=e436]: Full-stack engineer with 5+ years building performant web applications. Passionate about clean architecture, developer experience, and shipping products that users love.
+          - generic [ref=e437]:
+            - heading "Experience" [level=2] [ref=e438]
+            - generic [ref=e439]:
+              - generic [ref=e440]:
+                - generic [ref=e441]:
+                  - text: Senior Software Engineer
+                  - generic [ref=e442]: · Northwind Labs
+                - generic [ref=e443]: Jan 2022 – Present
+              - generic [ref=e444]: San Francisco, CA
+              - list [ref=e445]:
+                - listitem [ref=e446]: Led migration of monolith to microservices, cutting deploy time by 60%.
+                - listitem [ref=e447]: Built a real-time analytics dashboard serving 40K+ daily active users.
+          - generic [ref=e448]:
+            - heading "Education" [level=2] [ref=e449]
+            - generic [ref=e450]:
+              - generic [ref=e451]:
+                - generic [ref=e452]:
+                  - text: B.S. Computer Science
+                  - generic [ref=e453]: · University of California, Berkeley
+                - generic [ref=e454]: "2018"
+              - generic [ref=e455]: "GPA: 3.8"
+          - generic [ref=e456]:
+            - heading "Skills" [level=2] [ref=e457]
+            - generic [ref=e458]: TypeScript,React,Node.js,PostgreSQL,AWS,Docker
+          - generic [ref=e459]:
+            - heading "Projects" [level=2] [ref=e460]
+            - generic [ref=e461]:
+              - generic [ref=e462]:
+                - generic [ref=e463]:
+                  - text: OpenSchedule
+                  - generic [ref=e464]: · React, Express, PostgreSQL
+                - generic [ref=e465]: github.com/alexmorgan/openschedule
+              - list [ref=e466]:
+                - listitem [ref=e467]: Open-source team scheduling tool with 1.2K GitHub stars.
+          - generic [ref=e468]:
+            - heading "Certifications" [level=2] [ref=e469]
+            - generic [ref=e471]:
+              - generic [ref=e472]:
+                - text: AWS Solutions Architect – Associate
+                - generic [ref=e473]: · Amazon Web Services
+              - generic [ref=e474]: "2023"
