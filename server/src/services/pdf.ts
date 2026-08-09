@@ -2,11 +2,26 @@ import puppeteer, { type Browser } from 'puppeteer';
 
 let browserPromise: Promise<Browser> | null = null;
 
+async function launchBrowser(): Promise<Browser> {
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
+  // A crashed or externally killed Chromium must not stay cached: otherwise every
+  // later request reuses a dead browser and the route 500s until the server is
+  // restarted. Dropping the cache here lets the next call relaunch.
+  browser.once('disconnected', () => {
+    browserPromise = null;
+  });
+  return browser;
+}
+
 function getBrowser(): Promise<Browser> {
   if (!browserPromise) {
-    browserPromise = puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    browserPromise = launchBrowser().catch((err) => {
+      // Don't cache a failed launch either.
+      browserPromise = null;
+      throw err;
     });
   }
   return browserPromise;
@@ -20,6 +35,19 @@ const GOOGLE_FONTS_LINK =
  * The `html` is the serialized .resume-page element; `css` is the shared resume CSS.
  */
 export async function renderPDF(html: string, css: string): Promise<Uint8Array> {
+  try {
+    return await renderOnce(html, css);
+  } catch (err) {
+    // If the browser died during this render, the 'disconnected' handler has
+    // already cleared the cache — retry once against a freshly launched browser.
+    if (browserPromise === null) {
+      return await renderOnce(html, css);
+    }
+    throw err;
+  }
+}
+
+async function renderOnce(html: string, css: string): Promise<Uint8Array> {
   const browser = await getBrowser();
   const page = await browser.newPage();
   try {

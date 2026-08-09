@@ -10,6 +10,8 @@ interface CollapsibleProps {
   /** Props spread onto the drag handle (from dnd-kit). */
   dragHandleProps?: Record<string, unknown>;
   headerRight?: ReactNode;
+  /** Stable hook for tests. */
+  testId?: string;
 }
 
 export function Collapsible({
@@ -19,11 +21,12 @@ export function Collapsible({
   children,
   dragHandleProps,
   headerRight,
+  testId,
 }: CollapsibleProps) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <section className="overflow-hidden rounded-lg border border-border bg-panel">
+    <section data-testid={testId} className="overflow-hidden rounded-lg border border-border bg-panel">
       <div className="flex items-center gap-1 px-2 py-2.5">
         {dragHandleProps && (
           <button

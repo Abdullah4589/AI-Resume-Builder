@@ -64,6 +64,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {items.map((t) => (
           <div
             key={t.id}
+            data-testid="toast"
+            data-toast-kind={t.kind}
             className="pointer-events-auto flex items-start gap-2.5 rounded-lg border border-border bg-panel px-3.5 py-3 text-sm text-gray-100 shadow-xl transition-all"
           >
             <span className="mt-0.5 shrink-0">{ICONS[t.kind]}</span>

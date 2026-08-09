@@ -20,7 +20,11 @@ export function BulletGenerator({ jobTitle, company, onAccept }: BulletGenerator
   const [accepted, setAccepted] = useState<Set<number>>(new Set());
   const { loading, generateBullets } = useAI();
 
+  // Bullets are generated from the role, so a job title is the one hard requirement.
+  const canGenerate = jobTitle.trim().length > 0;
+
   async function generate() {
+    if (!canGenerate) return;
     const result = await generateBullets(jobTitle, company, description || undefined);
     if (result) {
       setBullets(result);
@@ -59,13 +63,19 @@ export function BulletGenerator({ jobTitle, company, onAccept }: BulletGenerator
             rows={2}
           />
 
-          <Button variant="primary" size="sm" onClick={generate} disabled={loading}>
+          <Button variant="primary" size="sm" onClick={generate} disabled={loading || !canGenerate}>
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
             {bullets.length ? 'Regenerate' : 'Generate'}
           </Button>
 
+          {!canGenerate && (
+            <p role="alert" data-testid="bullets-validation" className="text-xs text-amber-400">
+              Add a job title to this role first — bullets are generated from it.
+            </p>
+          )}
+
           {loading && (
-            <div className="space-y-2.5">
+            <div data-testid="bullets-loading" className="space-y-2.5">
               {[0, 1, 2, 3].map((i) => (
                 <SkeletonLine key={i} className="h-4 w-full" />
               ))}
@@ -73,10 +83,11 @@ export function BulletGenerator({ jobTitle, company, onAccept }: BulletGenerator
           )}
 
           {!loading && bullets.length > 0 && (
-            <ul className="space-y-2">
+            <ul data-testid="bullet-suggestions" className="space-y-2">
               {bullets.map((b, i) => (
                 <li
                   key={i}
+                  data-testid="bullet-suggestion"
                   className="flex items-start gap-2 rounded-lg border border-border bg-[#10131c] p-2.5"
                 >
                   <span className="flex-1 text-sm leading-relaxed text-gray-200">{b}</span>

@@ -27,7 +27,7 @@ export function SkillsSection({ dragHandleProps }: { dragHandleProps?: Record<st
   }
 
   return (
-    <Collapsible title="Skills" icon={<Wrench size={16} />} dragHandleProps={dragHandleProps}>
+    <Collapsible title="Skills" icon={<Wrench size={16} />} dragHandleProps={dragHandleProps} testId="section-skills">
       <div className="space-y-3">
         {skills.length > 0 && (
           <div className="flex flex-wrap gap-1.5">

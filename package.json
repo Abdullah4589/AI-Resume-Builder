@@ -13,9 +13,11 @@
     "dev:server": "npm -w server run dev",
     "build": "npm -w client run build && npm -w server run build",
     "typecheck": "npm -w client run typecheck && npm -w server run typecheck",
-    "start": "npm -w server run start"
+    "start": "npm -w server run start",
+    "test": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "concurrently": "^9.1.2"
   },
   "allowScripts": {

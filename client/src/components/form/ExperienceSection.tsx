@@ -23,7 +23,7 @@ export function ExperienceSection({
   const removeBullet = useResumeStore((s) => s.removeExperienceBullet);
 
   return (
-    <Collapsible title="Work Experience" icon={<Briefcase size={16} />} dragHandleProps={dragHandleProps}>
+    <Collapsible title="Work Experience" icon={<Briefcase size={16} />} dragHandleProps={dragHandleProps} testId="section-experience">
       <div className="space-y-3">
         {experience.map((entry) => (
           <EntryCard key={entry.id} title={entry.jobTitle || 'New role'} onRemove={() => remove(entry.id)}>

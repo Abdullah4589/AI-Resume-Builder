@@ -8,7 +8,7 @@ export function PersonalInfoSection() {
   const updatePersonal = useResumeStore((s) => s.updatePersonal);
 
   return (
-    <Collapsible title="Personal Info" icon={<User size={16} />}>
+    <Collapsible title="Personal Info" icon={<User size={16} />} testId="section-personal">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <InputField
           label="Full name"

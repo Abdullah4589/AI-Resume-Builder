@@ -16,7 +16,7 @@ export function EducationSection({
   const remove = useResumeStore((s) => s.removeEducation);
 
   return (
-    <Collapsible title="Education" icon={<GraduationCap size={16} />} dragHandleProps={dragHandleProps}>
+    <Collapsible title="Education" icon={<GraduationCap size={16} />} dragHandleProps={dragHandleProps} testId="section-education">
       <div className="space-y-3">
         {education.map((entry) => (
           <EntryCard key={entry.id} title={entry.degree || 'New entry'} onRemove={() => remove(entry.id)}>

@@ -52,7 +52,7 @@ export function ATSOptimizer() {
           )}
 
           {!loading && result && (
-            <div className="space-y-4 rounded-lg border border-border bg-[#10131c] p-4">
+            <div data-testid="ats-result" className="space-y-4 rounded-lg border border-border bg-[#10131c] p-4">
               <div className="flex items-center gap-5">
                 <CircularProgress value={result.score} />
                 <div>
