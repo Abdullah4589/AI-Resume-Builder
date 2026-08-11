@@ -1,301 +1,136 @@
 # AI Resume Builder - Project Documentation
 
-## Overview
+> **Two parts.** Part 1 (Engineering Rules) is binding: it constrains what you may
+> do. Part 2 (Design Rationale) records *why* the system is built the way it is.
+> Structure, dependencies, endpoints and scripts are deliberately not documented
+> here — read the code and the package manifests for those, and when this file
+> and the code disagree, the code wins.
 
-AI Resume Builder is a full-stack, AI-powered resume creation and optimization platform. It provides an intuitive web interface for building resumes with AI assistance, live preview across multiple professional templates, and one-click PDF download with pixel-perfect formatting.
+---
 
-## Architecture
+# Part 1 — Engineering Rules
 
-### Tech Stack
+These rules apply to every change, whether made by a human or an agent.
 
-**Frontend (Client)**
-- React 18.3 + Vite 6.0 for fast development and builds
-- TypeScript 5.7 for type safety
-- Zustand for state management (resume data & customization)
-- Tailwind CSS 3.4 for styling
-- @dnd-kit for drag-and-drop functionality (section reordering)
-- Lucide React for icons
+## 1. Definition of done
 
-**Backend (Server)**
-- Node.js with Express 4.21 for API
-- TypeScript 5.7 for type safety
-- Anthropic SDK 0.65 for Claude AI integration
-- Puppeteer 24.0 for server-side PDF generation with Chromium
-- CORS enabled for client communication
-- dotenv for environment configuration
+A change is not done until all four hold:
 
-**AI Model**
-- Claude Sonnet 4.6 via Anthropic API
-- Graceful mock mode when API key is unavailable (for development/demo)
+1. `npm run typecheck` passes (both workspaces, zero errors).
+2. `npm run build` passes.
+3. `npm test` passes — the full Playwright suite, from a cold start.
+4. Behaviour changes are covered by an e2e test that fails without the change.
 
-**Data Persistence**
-- localStorage on client (no database required)
-- No authentication layer (single-user/demo mode)
+Never report work as complete on the strength of "it should work". Run the
+commands and quote the real output. If a step fails, say so with the output
+rather than describing the intent.
 
-### Project Structure
+## 2. Project structure
 
-```
-AI Resume Builder/
-├── client/                    # React frontend workspace
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── ai/           # AI feature components
-│   │   │   │   ├── ATSOptimizer.tsx      # ATS score optimization
-│   │   │   │   ├── BulletGenerator.tsx   # Generate achievement bullets
-│   │   │   │   └── Improver.tsx          # Content improvement
-│   │   │   ├── form/         # Resume form sections
-│   │   │   │   ├── PersonalInfoSection.tsx
-│   │   │   │   ├── SummarySection.tsx
-│   │   │   │   ├── ExperienceSection.tsx
-│   │   │   │   ├── EducationSection.tsx
-│   │   │   │   ├── SkillsSection.tsx
-│   │   │   │   ├── ProjectsSection.tsx
-│   │   │   │   ├── CertificationsSection.tsx
-│   │   │   │   ├── CustomSectionsEditor.tsx
-│   │   │   │   ├── BulletListEditor.tsx
-│   │   │   │   ├── MonthYearPicker.tsx
-│   │   │   │   ├── SortableSection.tsx
-│   │   │   │   ├── EntryCard.tsx
-│   │   │   │   └── FormPanel.tsx
-│   │   │   ├── preview/      # Live preview and templates
-│   │   │   │   ├── LivePreview.tsx
-│   │   │   │   ├── ResumeDocument.tsx
-│   │   │   │   ├── ResumeHeader.tsx
-│   │   │   │   ├── CustomizationToolbar.tsx
-│   │   │   │   ├── templates/
-│   │   │   │   │   ├── ClassicTemplate.tsx
-│   │   │   │   │   ├── MinimalTemplate.tsx
-│   │   │   │   │   └── ModernTemplate.tsx
-│   │   │   │   ├── blocks.tsx
-│   │   │   │   ├── resumeStyles.ts
-│   │   │   │   ├── formatters.ts
-│   │   │   │   └── previewVars.ts
-│   │   │   ├── ui/           # Reusable UI components
-│   │   │   │   ├── Button.tsx
-│   │   │   │   ├── Modal.tsx
-│   │   │   │   ├── Toast.tsx
-│   │   │   │   ├── Field.tsx
-│   │   │   │   ├── Collapsible.tsx
-│   │   │   │   ├── DiffView.tsx
-│   │   │   │   ├── Spinner.tsx
-│   │   │   │   ├── CircularProgress.tsx
-│   │   │   │   └── Tag.tsx
-│   │   │   └── DownloadPdfButton.tsx
-│   │   ├── hooks/
-│   │   │   ├── useAI.ts       # AI service integration hook
-│   │   │   └── useFitScale.ts # PDF layout scaling
-│   │   ├── store/
-│   │   │   ├── useResumeStore.ts        # Resume data state (Zustand)
-│   │   │   ├── useCustomizationStore.ts # Template customization (Zustand)
-│   │   │   └── defaults.ts
-│   │   ├── types/
-│   │   │   └── resume.ts      # TypeScript interfaces for resume data
-│   │   ├── lib/
-│   │   │   ├── cn.ts          # Tailwind classname utilities
-│   │   │   └── id.ts          # ID generation utilities
-│   │   ├── App.tsx            # Main app component
-│   │   ├── main.tsx           # React DOM entry
-│   │   ├── index.css          # Global styles
-│   │   └── vite-env.d.ts
-│   ├── index.html
-│   ├── vite.config.ts
-│   ├── tsconfig.json
-│   ├── tailwind.config.js
-│   └── package.json
-│
-├── server/                    # Express backend workspace
-│   ├── src/
-│   │   ├── routes/
-│   │   │   ├── ai.ts          # AI endpoints (bullet generation, improvement, ATS)
-│   │   │   └── pdf.ts         # PDF generation endpoint
-│   │   ├── services/
-│   │   │   ├── claude.ts      # Anthropic SDK wrapper & prompts
-│   │   │   ├── mock.ts        # Mock AI responses (graceful fallback)
-│   │   │   └── pdf.ts         # Puppeteer PDF generation
-│   │   ├── types/
-│   │   │   └── resume.ts      # Shared TypeScript interfaces
-│   │   └── index.ts           # Express server setup
-│   ├── tsconfig.json
-│   └── package.json
-│
-├── package.json               # Root workspace config
-├── .gitignore
-├── README.md
-└── CLAUDE.md                  # This file
-```
+Respect the existing layout; do not invent parallel hierarchies.
 
-## Features Implemented
+- `client/src/components/{ai,form,preview,ui}/` — one component per file, named
+  after the file. `ui/` holds only generic, resume-agnostic primitives; anything
+  that knows what a resume is belongs in `form/` or `preview/`.
+- `client/src/store/` — all shared mutable state. Component state stays local.
+- `client/src/types/resume.ts` and `server/src/types/resume.ts` are duplicated by
+  design. **Change one, change both in the same commit** — a silent divergence
+  between the two is a production bug, not a style issue.
+- `server/src/routes/` — HTTP concerns only (parse, validate, delegate, respond).
+  Business logic goes in `server/src/services/`. Routes must not call the
+  Anthropic SDK or Puppeteer directly.
+- `tests/` — Playwright specs plus `helpers.ts`. No unit-test framework is
+  installed; do not add one without being asked.
 
-### 1. Resume Form (Client-side)
-- **Personal Information** - Name, email, phone, location, URL
-- **Professional Summary** - Text area with character counter
-- **Experience** - Multiple entries with company, title, dates, bullet points
-- **Education** - Multiple entries with school, degree, field, dates
-- **Skills** - Skill tags with add/remove functionality
-- **Projects** - Portfolio items with descriptions
-- **Certifications** - Professional certifications list
-- **Custom Sections** - User can add/remove arbitrary sections
-- **Drag-and-drop** - Reorder sections and entries using @dnd-kit
-- **Date Picker** - Month/year picker for start/end dates
-- **Undo/Redo** - State management via Zustand
+New top-level directories require explicit approval.
 
-### 2. AI Features (Server + Client)
+## 3. Code standards
 
-#### Bullet Point Generator
-- Takes job description/context
-- Uses Claude Sonnet 4.6 to generate achievement bullets
-- Returns multiple options with diff view showing improvements
-- Gracefully falls back to mock data if no API key
+- TypeScript strict mode. **`any` is prohibited** — use `unknown` and narrow it.
+- No non-null assertions (`!`) on values that can genuinely be null. Handle it.
+- No new runtime dependency without approval. Justify it against what is already
+  installed; this project deliberately has a small dependency tree.
+- Every `fetch`/API call has an error path that reaches the user. Silent
+  `catch {}` is prohibited — mock mode is a fallback, not an error handler.
+- Comments explain *why*, not *what*. Match surrounding comment density.
+- Prefer editing an existing file over creating a new one.
 
-#### Content Improver
-- Improves existing resume bullets
-- Enhances clarity, impact, and professionalism
-- Shows before/after comparison
-- Mock mode provides realistic sample improvements
+## 4. Testing rules
 
-#### ATS Optimizer
-- Analyzes resume for Applicant Tracking System compatibility
-- Scores resume on ATS-friendliness (0-100)
-- Provides specific improvement suggestions
-- Highlights keywords and formatting issues
+- Selectors: user-facing roles and labels (`getByRole`, `getByLabel`). Never CSS
+  classes or DOM structure — Tailwind classes change and are not a contract.
+- No arbitrary `waitForTimeout`. Use web-first assertions (`toPass`, `expect`).
+- Tests must pass from a cold start with no manually pre-started servers.
+- Tests must be independent and parallel-safe; each seeds its own state.
+- Two known environment constraints, already encoded in `playwright.config.ts` —
+  do not "simplify" them back:
+  - Probe `127.0.0.1`, not `localhost`. Node resolves `localhost` to IPv6 `::1`
+    first while Vite and Express bind IPv4 only.
+  - The API server runs via `serve:server` (plain `tsx`), not `dev:server`
+    (`tsx watch`) — watch mode never boots when Playwright pipes its stdio.
+- **Never make a test pass by weakening it.** Deleting an assertion, loosening a
+  matcher, or adding `test.skip` to silence a real failure is prohibited. If a
+  test describes a feature that does not exist, skip it *with a comment
+  explaining precisely why* (see TC-02, TC-11/12, TC-16 for the expected form)
+  and surface it as a product gap. A skipped test is a claim about the product,
+  and it must be a true one.
 
-### 3. Live Preview (Client-side)
-Three fully-functional resume templates:
-- **Classic Template** - Traditional professional look
-- **Modern Template** - Contemporary design with accent colors
-- **Minimal Template** - Clean, minimal aesthetic
+## 5. Secrets and configuration
 
-Features:
-- Real-time preview updates as user types
-- Responsive preview across different screen sizes
-- Section collapsing in preview
-- Template switching without data loss
+- `ANTHROPIC_API_KEY` is read server-side only. It must never reach the client
+  bundle, a test fixture, a log line, or a commit.
+- `.env` is ignored; `.env.example` is committed and lists every variable with a
+  placeholder. Adding a variable means updating `.env.example` in the same commit.
+- Never print, echo, or paste an environment variable's value.
+- Mock mode (no API key) must keep working. It is how the app is demoed and how
+  CI runs — never make a code path depend on a live key.
 
-### 4. Customization Toolbar
-- **Color themes** - Select accent colors
-- **Font selection** - Choose from web fonts
-- **Spacing controls** - Adjust section and item spacing
-- **Template switching** - Change between 3 templates
-- **Live updates** - Instant preview updates
+## 6. Git and GitHub workflow
 
-### 5. PDF Export
-- Server-side PDF generation using Puppeteer
-- Pixel-perfect rendering matching live preview
-- Proper page breaks and pagination
-- Downloads as resume.pdf
+- **Never commit or push unless explicitly asked.** No exceptions.
+- Never commit directly to `main`. Branch as `feat/`, `fix/`, `chore/`, `test/`,
+  or `docs/` + a short kebab-case description.
+- Conventional Commits for messages. Imperative mood, explain *why* in the body.
+- One logical change per commit. Do not bundle a refactor with a fix.
+- Never commit: `node_modules/`, `dist/`, `.env`, `*.log`, test artifacts
+  (`playwright-report/`, `test-results/`, `.playwright-mcp/`), screenshots, or
+  scratch files. Check `git status` before staging; stage explicit paths rather
+  than `git add -A`.
+- Never use `--force`, `--no-verify`, or `--amend` on pushed commits. Never
+  rewrite published history. Never skip a failing hook — fix the cause.
+- A PR must state what changed, why, and how it was verified. CI must be green
+  before merge; a red build is never merged "to fix forward".
 
-## API Endpoints
+## 7. Deployment guardrails
 
-### AI Routes (`/api/ai/*`)
+- Deployment is a human decision. An agent may prepare and describe a deploy; it
+  may never trigger one.
+- Never run a deploy, publish, or infrastructure-mutating command
+  (`npm publish`, `vercel --prod`, `gh release create`, cloud CLIs) unprompted.
+- Preconditions for any production deploy: green CI on `main`, `npm run build`
+  clean, `ANTHROPIC_API_KEY` set in the host environment (not baked into an
+  image), and CORS restricted to the real client origin — the current
+  `app.use(cors())` allows every origin and must be tightened before going live.
+- The PDF route runs Puppeteer/Chromium: it is CPU- and memory-heavy and needs a
+  host with a real Chromium install. Do not assume a serverless target works.
+- Destructive or irreversible operations (deleting branches, resources, data)
+  require explicit confirmation naming the exact target.
 
-**POST /api/ai/bullet-generator**
-```json
-{
-  "context": "string",      // Job description or context
-  "existingBullet": "string" // Optional: existing bullet to improve
-}
-```
-Response: `{ bullets: string[], mockMode: boolean }`
+## 8. Working with the user
 
-**POST /api/ai/improver**
-```json
-{
-  "text": "string",     // Resume text to improve
-  "section": "string"   // Section type (experience, summary, etc.)
-}
-```
-Response: `{ improved: string, mockMode: boolean }`
+- Ask before acting when a decision is genuinely ambiguous; otherwise make the
+  routine call and state the assumption.
+- Report failures honestly. A test that fails is information, not something to
+  work around.
+- If a request seems mistaken, say so once, plainly — then do as asked.
 
-**POST /api/ai/ats-optimizer**
-```json
-{
-  "resumeText": "string" // Full resume text
-}
-```
-Response: `{ score: number, suggestions: string[], mockMode: boolean }`
+---
 
-### PDF Route (`/api/pdf/*`)
+# Part 2 — Design Rationale
 
-**POST /api/pdf/generate**
-```json
-{
-  "html": "string",           // HTML content of resume
-  "template": "string",       // Template name
-  "customizations": {...}     // Customization settings
-}
-```
-Response: PDF file (application/pdf)
-
-## AI Integration Details
-
-### Claude Integration (`server/src/services/claude.ts`)
-- Uses Anthropic SDK `@anthropic-ai/sdk@0.65.0`
-- Model: `claude-sonnet-4-6`
-- Context: 200k token window
-- Includes specialized prompts for:
-  - Resume bullet generation (achievement-focused language)
-  - Content improvement (clarity, impact, brevity)
-  - ATS optimization (keyword analysis, structure)
-
-### Mock Mode (`server/src/services/mock.ts`)
-- Activates when `ANTHROPIC_API_KEY` is not set
-- Returns realistic sample responses
-- Allows full app functionality for development/demo
-- No external API calls or costs
-
-## State Management
-
-### Resume Store (`client/src/store/useResumeStore.ts`)
-- Zustand store managing all resume data
-- Persisted to localStorage
-- Tracks: personal info, sections, customizations
-- Actions: update sections, add entries, remove entries, reset
-
-### Customization Store (`client/src/store/useCustomizationStore.ts`)
-- Template and styling customization state
-- Selected template (classic/modern/minimal)
-- Color theme, fonts, spacing
-- Persisted to localStorage
-
-## Development & Deployment
-
-### Setup
-```bash
-# Install dependencies (both workspaces + Puppeteer Chromium)
-npm install
-
-# Copy environment file and optionally add API key
-cp .env.example .env
-# Edit .env and add ANTHROPIC_API_KEY for real AI features
-
-# Start development servers
-npm run dev
-# Client: http://localhost:5173
-# Server: http://localhost:3001
-```
-
-### Available Scripts
-- `npm run dev` - Start client + server concurrently
-- `npm run dev:client` - Client only
-- `npm run dev:server` - Server only
-- `npm run build` - Build both workspaces
-- `npm run typecheck` - Type-check both workspaces
-- `npm run start` - Run production server
-
-### Build
-```bash
-npm run build
-# Outputs:
-# - client/dist/ (Vite build, static assets)
-# - server/dist/ (TypeScript compiled to JS)
-```
-
-### Production Deployment
-1. Set `ANTHROPIC_API_KEY` environment variable
-2. Run `npm run build`
-3. Deploy `client/dist` as static files (CDN/static hosting)
-4. Deploy `server` (node process or serverless)
-5. Configure CORS for client domain
+Why the system is built this way. Everything else about the architecture —
+layout, dependencies, endpoints, scripts — is derivable from the code and the
+package manifests, so it is deliberately not duplicated here.
 
 ## Key Design Decisions
 
@@ -323,31 +158,3 @@ npm run build
 - Modern, accessible drag-and-drop library
 - Reorder entire sections or individual entries
 - Smooth animations and touch support
-
-## Testing & Type Safety
-- TypeScript strict mode throughout
-- Type-safe Zustand stores
-- Shared type definitions between client and server
-- Full type coverage for resume data structures
-
-## Performance Considerations
-- Vite for fast client-side development and builds
-- React lazy loading for heavy components (AI features)
-- localStorage caching reduces API calls
-- Puppeteer PDF generation is CPU-intensive (runs server-side)
-
-## Future Enhancement Opportunities
-- Add user authentication for multi-user support
-- Implement database for resume persistence
-- Support for additional file formats (DOCX, JSON export)
-- More resume templates and customization options
-- AI-powered job application matching
-- Built-in grammar and spell checking
-- Analytics on resume improvements
-
-## Notes
-
-- The app runs in **mock mode** when `ANTHROPIC_API_KEY` is not set, providing full functionality for demos and development
-- All resume data is stored in browser localStorage - no server-side storage
-- PDF generation requires a working Chrome/Chromium installation (included via Puppeteer)
-- AI features use Claude Sonnet 4.6 for optimal speed and cost balance
