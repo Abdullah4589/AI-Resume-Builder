@@ -132,29 +132,18 @@ Why the system is built this way. Everything else about the architecture —
 layout, dependencies, endpoints, scripts — is derivable from the code and the
 package manifests, so it is deliberately not duplicated here.
 
-## Key Design Decisions
+**See [DESIGN-DECISIONS.md](./DESIGN-DECISIONS.md)** for the five decisions that
+shape this codebase, each with the alternative rejected, the cost accepted, and
+the conditions that would invalidate it:
 
-### localStorage for Persistence
-- Simplifies deployment (no backend DB required)
-- Suitable for single-user/demo scenarios
-- Users can save multiple resumes by exporting/importing JSON
+1. localStorage over a database — and the missing `migrate` function.
+2. Monorepo workspaces with a duplicated (strictly: subset) type file.
+3. Mock mode checked up front via `isLive`, never served from a `catch`.
+4. Server-side Puppeteer — the heaviest cost here, and the hosting constraint
+   it imposes on any deploy target.
+5. @dnd-kit for reordering — the weakest of the five, and why.
 
-### Monorepo Workspace Structure
-- Shared TypeScript types (`types/resume.ts` in both workspaces)
-- Unified dependency management via root `package.json`
-- Single deploy with coordinated builds
-
-### Mock Mode
-- Enables full feature demonstration without API key
-- Graceful fallback for development environments
-- Realistic sample responses for UX testing
-
-### Server-side PDF Generation
-- Puppeteer ensures pixel-perfect PDF matching live preview
-- Server-side processing avoids client-side complexity
-- Supports all template variations
-
-### Drag-and-drop with @dnd-kit
-- Modern, accessible drag-and-drop library
-- Reorder entire sections or individual entries
-- Smooth animations and touch support
+Before changing any of them, read the cost that was accepted. The trade-offs are
+load-bearing: §5's rule that mock mode must keep working, §7's warning that
+serverless targets are unsafe, and §4's ban on structural selectors all follow
+from decisions recorded there.
