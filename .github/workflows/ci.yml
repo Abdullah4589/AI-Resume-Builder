@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# A new push to the same branch makes the previous run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: typecheck · build · e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # No ANTHROPIC_API_KEY is set, deliberately: the suite must pass in mock
+    # mode. If a test ever needs a live key to pass, the test is wrong.
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Installs both workspaces plus Puppeteer's bundled Chromium, which the
+      # /api/pdf route needs at test time.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      # Explicit, because package.json's `allowScripts` field gates install
+      # scripts — if Puppeteer's postinstall is skipped, /api/pdf tests fail
+      # with no Chromium and a confusing error.
+      - name: Install Puppeteer browser
+        run: npx --workspace server puppeteer browsers install chrome
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: End-to-end tests
+        run: npm test
+
+      # The HTML report is the only useful artefact when a run goes red.
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

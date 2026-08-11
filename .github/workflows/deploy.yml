@@ -1,0 +1,86 @@
+name: Deploy (production)
+
+# Manual only. Deployment is a human decision (CLAUDE.md §7) — there is no
+# push/schedule trigger here on purpose, so nothing deploys as a side effect
+# of merging.
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "deploy" to confirm'
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: Preconditions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check confirmation input
+        if: inputs.confirm != 'deploy'
+        run: |
+          echo "::error::Confirmation input was '${{ inputs.confirm }}', expected 'deploy'."
+          exit 1
+
+      - name: Check ref is main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Deploys run from main only; got ${{ github.ref }}."
+          exit 1
+
+  verify:
+    name: Re-run full verification
+    needs: guard
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx --workspace server puppeteer browsers install chrome
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test
+
+  deploy:
+    name: Deploy
+    needs: verify
+    runs-on: ubuntu-latest
+    # Requires a GitHub Environment named "production" with required reviewers
+    # configured — that approval gate is what makes this a human decision.
+    # Set ANTHROPIC_API_KEY as an environment secret there, never in the image.
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required secrets are present
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "${ANTHROPIC_API_KEY}" ]; then
+            echo "::error::ANTHROPIC_API_KEY is not set on the production environment."
+            exit 1
+          fi
+          echo "ANTHROPIC_API_KEY is present."
+
+      # The PDF route runs Puppeteer/Chromium: the host needs a real Chromium
+      # install and meaningful CPU/memory. Do not swap this for a serverless
+      # target without re-testing /api/pdf under load.
+      - name: Deploy
+        run: |
+          echo "::error::No deployment target is configured yet."
+          echo "Add the real deploy step here (host must provide Chromium for Puppeteer)."
+          echo "Before first use, tighten CORS in server/src/index.ts — app.use(cors())"
+          echo "currently allows every origin."
+          exit 1
