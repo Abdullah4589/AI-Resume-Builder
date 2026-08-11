@@ -5,9 +5,15 @@ dist/
 .DS_Store
 client/dist/
 server/dist/
+*.tsbuildinfo
 
 # Playwright
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.playwright-mcp/
+e2e-test-report.html
+
+# Claude Code: shared settings.json is committed, personal overrides are not
+.claude/settings.local.json
