@@ -11,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://127.0.0.1:5173',
     trace: 'on-first-retry',
   },
 
@@ -33,13 +33,17 @@ export default defineConfig({
   webServer: [
     {
       command: 'npm run dev:client',
-      url: 'http://localhost:5173',
+      url: 'http://127.0.0.1:5173',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
     {
-      command: 'npm run dev:server',
-      url: 'http://localhost:3001/api/health',
+      // serve:server, not dev:server — `tsx watch` never boots the server when
+      // Playwright pipes its stdio, so the readiness probe times out.
+      command: 'npm run serve:server',
+      // 127.0.0.1, not localhost: Node resolves localhost to ::1 first and the
+      // Express server binds IPv4 only, so the readiness probe never succeeds.
+      url: 'http://127.0.0.1:3001/api/health',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
